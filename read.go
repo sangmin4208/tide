@@ -41,8 +41,9 @@ func getTime(line string) string {
 	lines = Filter(lines, func(s string) bool {
 		return !strings.Contains(s, "저")
 	})
+	//[00:33 고 108]
 	for _, v := range lines {
-		///[00:33 고 108]
+		// [00:33]
 		times = append(times, strings.Split(v, "/")[0])
 	}
 
