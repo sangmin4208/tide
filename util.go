@@ -1,11 +1,10 @@
 package main
 
-func Filter(vs []string, f func(string) bool) []string {
-	vsf := make([]string, 0)
-	for _, v := range vs {
-		if f(v) {
-			vsf = append(vsf, v)
-		}
-	}
-	return vsf
+import (
+	"golang.org/x/text/encoding/korean"
+)
+
+func Decode(p []byte) string {
+	t, _ := korean.EUCKR.NewDecoder().Bytes(p)
+	return string(t)
 }
