@@ -10,7 +10,7 @@ import (
 
 func convertToTide(fileName string) *Tide {
 	area := getArea(fileName)
-	times := []string{}
+	tideInfos := []TideInfo{}
 	fo, err := os.Open(INPUT_PATH + "/" + fileName)
 	if err != nil {
 		log.Fatal(err)
@@ -18,28 +18,32 @@ func convertToTide(fileName string) *Tide {
 	defer fo.Close()
 	reader := bufio.NewReader(fo)
 	trimLine(reader, 5)
+
 	for {
 		line, isPrefix, err := reader.ReadLine()
 		if isPrefix || err != nil {
 			break
 		}
-		times = append(times, getTime(string(line)))
+		 date, times := getDateAndTime(string(line))
+		tideInfos = append(tideInfos, TideInfo{Date: date,Times: times})
 	}
 	return &Tide{
-		area:  area,
-		times: times,
+		Area:  area,
+		Info: tideInfos,
 	}
 }
 
-func getTime(line string) string {
+func getDateAndTime(line string) (string, []string) {
+	date := ""
 	times := []string{}
 	// 2021-07-01, 00:33/고/108, 06:54/저/42, 13:18/고/99, 18:59/저/51
 	lines := strings.Split(string(line), ", ")
 	// 00:33/고/108, 06:54/저/42, 13:18/고/99, 18:59/저/51
+	date = lines[0]
 	lines = lines[1:]
 	// [00:33/고/108 13:18/고/99]
 	lines = Filter(lines, func(s string) bool {
-		return !strings.Contains(s, "저")
+		return strings.Contains(s, "고")
 	})
 	//[00:33 고 108]
 	for _, v := range lines {
@@ -47,7 +51,7 @@ func getTime(line string) string {
 		times = append(times, strings.Split(v, "/")[0])
 	}
 
-	return strings.Join(times, " ")
+	return date,times
 }
 
 func getFileNames(path string) []string {

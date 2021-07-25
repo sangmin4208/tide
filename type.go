@@ -1,6 +1,10 @@
 package main
 
 type Tide struct {
-	area  string
-	times []string
+	Area string
+	Info []TideInfo
+}
+type TideInfo struct {
+	Date  string
+	Times []string
 }

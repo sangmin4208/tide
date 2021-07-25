@@ -7,13 +7,18 @@ import (
 )
 
 func format(tide *Tide) string{
-	times := strings.Join(tide.times, "\n")
-	return times
+	line := ""
+	for _, v := range tide.Info {
+		line += v.Date + ", "
+		line += strings.Join(v.Times," ")
+		line += "\n"
+	}
+	return line
 }
 
 func writeFileWithTide(tide *Tide) {
 	stringToWrite:= format(tide)
-	err := ioutil.WriteFile(OUTPUT_PATH+"/"+tide.area+".txt", []byte(stringToWrite), 0644)
+	err := ioutil.WriteFile(OUTPUT_PATH+"/"+tide.Area+".txt", []byte(stringToWrite), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
