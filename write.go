@@ -18,9 +18,11 @@ func MakeDirectory(path string) string{
 
 
 func formatline(info *TideInfo) string{
-	line := info.Date + ","
+	line := ""
+	// line += info.Date + ","
 	line += strings.Join(info.Times," ")
-	line += "\n"
+	// line += "\n"
+	line += " "
 	return line
 }
 

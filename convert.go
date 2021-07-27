@@ -26,32 +26,42 @@ func getInfo(line string) *TideInfo{
 	s := strings.Split(line, ",")
 	info.Date = s[0]
 	s = s[1:]
-	//"'고"가 들어있는것만 추출
-	s = Filter(s, func (a string) bool {
-		return strings.Contains(a, "고")
-	})	
 
-	times := make([]string, len(s))
-	for i,v := range s {
-		times[i] = trimmingTime(v)
-	}
+	times := getTimes(s)
 	info.Times = times
 	return info
 }
 
-func Filter(s []string, f func(string) bool) []string{
-	result := make([]string,0,len(s))
 
-	for _,v := range s {
-		if f(v){
-			result = append(result, v)
-		}
-	}
-	return result
-}
-
-// 시간데이터만 뽑는 용도
+// 시간 데이터만 빼옴
 // 18:30/고/844 => 18:30
 func trimmingTime (s string) string{
-	return strings.Split(s,"/")[0]
+	time := strings.Split(s,"/")[0]
+	return strings.Trim(time," ")
+} 
+
+//16:16/고/41, --:--/-/--/--, --:--/-/--/--, --:--/-/--/-- => 16:16, --:--
+//날짜 뺀 한줄을 받아서 시간 뽑아오기
+func getTimes (line []string) []string{
+	timeIdx := []int{-1,-1}
+	for i,v := range line {
+		if strings.Contains(v,"고") {
+			if i == 0 || i == 2 {
+				timeIdx[0] = 0
+				timeIdx[1] = 2
+			}else{
+				timeIdx[0] = 1
+				timeIdx[1] = 3
+			}
+			break
+		}
+	}
+	if timeIdx[0] == -1 {
+		return []string{"--:--","--:--"}
+	}
+	time1 := trimmingTime(line[timeIdx[0]])
+	time2 := trimmingTime(line[timeIdx[1]])
+
+
+	return []string{time1,time2}
 }
