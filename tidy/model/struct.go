@@ -1,16 +1,20 @@
 package model
 
+type File struct {
+	Path string
+	Body string
+}
 type AreaCode struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
-
-type Tide struct {
-	Area  string
-	Infos []*TideInfo
+type URIinfo struct {
+	URI  string
+	Date string
+	AreaCode
 }
-
-type TideInfo struct {
-	Date  string
-	Times []string
+type InputDate struct {
+	Year       int
+	StartMonth int
+	EndMonth   int
 }
