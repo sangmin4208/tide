@@ -1,15 +1,17 @@
-package main
+package lib
 
 import (
 	"strings"
+
+	"github.com/sangmin4208/tidy/model"
 )
 
 //하나의 텍스트파일로 Tide 데이터를 채움
-func ConvertTide(text string, tide *Tide){
-	infos := []*TideInfo{}
+func ConvertTide(text string, tide *model.Tide) {
+	infos := []*model.TideInfo{}
 	for {
-		idx := strings.Index(text,"\n")
-		if idx == -1{
+		idx := strings.Index(text, "\n")
+		if idx == -1 {
 			break
 		}
 		line := text[:idx]
@@ -21,8 +23,8 @@ func ConvertTide(text string, tide *Tide){
 }
 
 //한줄로 TideInfo를 만들어서 리턴
-func getInfo(line string) *TideInfo{
-	info := new(TideInfo)
+func getInfo(line string) *model.TideInfo {
+	info := new(model.TideInfo)
 	s := strings.Split(line, ",")
 	info.Date = s[0]
 	s = s[1:]
@@ -32,24 +34,23 @@ func getInfo(line string) *TideInfo{
 	return info
 }
 
-
 // 시간 데이터만 빼옴
 // 18:30/고/844 => 18:30
-func trimmingTime (s string) string{
-	time := strings.Split(s,"/")[0]
-	return strings.Trim(time," ")
-} 
+func trimmingTime(s string) string {
+	time := strings.Split(s, "/")[0]
+	return strings.Trim(time, " ")
+}
 
 //16:16/고/41, --:--/-/--/--, --:--/-/--/--, --:--/-/--/-- => 16:16, --:--
 //날짜 뺀 한줄을 받아서 시간 뽑아오기
-func getTimes (line []string) []string{
-	timeIdx := []int{-1,-1}
-	for i,v := range line {
-		if strings.Contains(v,"고") {
+func getTimes(line []string) []string {
+	timeIdx := []int{-1, -1}
+	for i, v := range line {
+		if strings.Contains(v, "고") {
 			if i == 0 || i == 2 {
 				timeIdx[0] = 0
 				timeIdx[1] = 2
-			}else{
+			} else {
 				timeIdx[0] = 1
 				timeIdx[1] = 3
 			}
@@ -57,11 +58,10 @@ func getTimes (line []string) []string{
 		}
 	}
 	if timeIdx[0] == -1 {
-		return []string{"--:--","--:--"}
+		return []string{"--:--", "--:--"}
 	}
 	time1 := trimmingTime(line[timeIdx[0]])
 	time2 := trimmingTime(line[timeIdx[1]])
 
-
-	return []string{time1,time2}
+	return []string{time1, time2}
 }

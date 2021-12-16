@@ -1,4 +1,4 @@
-package main
+package model
 
 type AreaCode struct {
 	Code string `json:"code"`

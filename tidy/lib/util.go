@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"golang.org/x/text/encoding/korean"
