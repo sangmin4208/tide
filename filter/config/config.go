@@ -1,6 +1,6 @@
 package config
 
-const OUTPUT_PATH = "./output"
+const OUTPUT_PATH = "../output/filterd"
 
 var INPUT_PATH = "../output"
 
