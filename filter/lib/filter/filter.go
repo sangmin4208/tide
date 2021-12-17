@@ -24,7 +24,7 @@ func tideHelper(data string, criteria int) bool {
 	if err != nil {
 		return false
 	}
-	if criteria >= height {
+	if criteria > height {
 		return false
 	}
 	return true
